@@ -4,8 +4,6 @@
 
 
 
-#pragma comment(lib,"dinput8.lib")
-#pragma comment(lib,"dxguid.lib")
 
 void Input::Initialize(HINSTANCE hInstance, HWND hwnd)
 {
