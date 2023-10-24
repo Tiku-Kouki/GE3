@@ -2,4 +2,9 @@
 
 void WinApp::Initialize()
 {
+    
+}
+
+void WinApp::Update()
+{
 }
