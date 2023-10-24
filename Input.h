@@ -8,6 +8,8 @@
 #pragma comment(lib,"dxguid.lib")
 
 //using namespace Microsoft::WRL;
+#include "WinApp.h"
+
 
 class Input
 {
@@ -29,9 +31,11 @@ private:
 	// DirectInputのインスタンス
 	ComPtr<IDirectInput8> directInput;
 
+	WinApp* winApp_;
+
 public:
 	//初期化
-	void Initialize(HINSTANCE hInstance, HWND hwnd);
+	void Initialize(WinApp* winApp);
 	//更新
 	void Update();
 
