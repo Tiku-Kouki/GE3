@@ -910,18 +910,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
     // ゲームループ
     while (true) {
-        // メッセージがある？
-        if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
-            TranslateMessage(&msg); // キー入力メッセージの処理
-            DispatchMessage(&msg); // プロシージャにメッセージを送る
-        }
+        
+        if (winApp_->Update() == true) {
 
-        // ✖ボタンで終了メッセージが来たらゲームループを抜ける
-        if (msg.message == WM_QUIT) {
             break;
         }
 
         input_->Update();
+       
 
         // 数字の0キーが押されていたら
         if (input_->PushKey(DIK_0)) 
@@ -1082,6 +1078,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
     }
 
     delete input_;
+
+    winApp_->Finalize();
+
     delete winApp_;
   
 
