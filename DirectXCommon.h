@@ -7,6 +7,7 @@
 #define DIRECTINPUT_VERSION     0x0800   // DirectInputのバージョン指定
 #include <dinput.h>
 #include "WinApp.h"
+#include <vector>
 
 #pragma comment(lib,"d3d12.lib")
 #pragma comment(lib,"dxgi.lib")
@@ -28,6 +29,8 @@ public:
 	//描画後処理
 	void PostDraw();
 
+
+
 private:
 	//デバイス
 	void DeviceInitialize();
@@ -48,11 +51,7 @@ private:
 	//WindowsAPI
 	WinApp* winApp = nullptr;
 
-	//DirectX12デバイス
-	Microsoft::WRL::ComPtr<ID3D12Device> device;
-
-	//DXGIファクトリ
-	Microsoft::WRL::ComPtr<IDXGIFactory7> dxgiFactory;
+	
 
 	ComPtr<ID3D12Device> device;
 	ComPtr<IDXGIFactory7> dxgiFactory;
@@ -65,6 +64,14 @@ private:
 	ComPtr<IDXGISwapChain4> swapChain;
 
 	ComPtr<ID3D12DescriptorHeap> rtvHeap;
+	std::vector<ComPtr<ID3D12Resource>> backBuffers;
+	D3D12_DESCRIPTOR_HEAP_DESC dsvHeapDesc{};
+
+	ComPtr<ID3D12Fence> fence;
+	UINT64 fenceVal = 0;
+
 
 	DXGI_SWAP_CHAIN_DESC1 swapChainDesc{};
+	
+	D3D12_RESOURCE_BARRIER barrierDesc{};
 };
