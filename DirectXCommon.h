@@ -29,7 +29,7 @@ public:
 	//描画後処理
 	void PostDraw();
 
-
+	ComPtr<ID3D12Device>  GetDevice() const { return device; }
 
 private:
 	//デバイス
