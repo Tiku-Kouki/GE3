@@ -1,24 +1,11 @@
-﻿#include <Windows.h>
-
-#include <cassert>
-#include <vector>
-#include <string>
-#include <DirectXMath.h>
-#include <DirectXTex.h>
-#include <d3dcompiler.h>
-#include <wrl.h>
-
-#include "Input.h"
+﻿#include "Input.h"
 #include "WinApp.h"
 #include "DirectXCommon.h"
 
 
-#pragma comment(lib, "d3dcompiler.lib")
-#pragma comment(lib, "dinput8.lib")
-#pragma comment(lib, "dxguid.lib")
 
-using namespace DirectX;
-using namespace Microsoft::WRL;
+
+
 
 
 // Windowsアプリでのエントリーポイント(main関数)
