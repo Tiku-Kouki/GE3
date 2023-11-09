@@ -29,7 +29,9 @@ public:
 	//描画後処理
 	void PostDraw();
 
-	ComPtr<ID3D12Device>  GetDevice() const { return device; }
+	ID3D12Device*  GetDevice() const { return device.Get(); }
+	ID3D12GraphicsCommandList* GetCommandList()	 const { return commandList.Get(); }
+
 
 private:
 	//デバイス
@@ -69,9 +71,11 @@ private:
 
 	ComPtr<ID3D12Fence> fence;
 	UINT64 fenceVal = 0;
+	D3D12_DESCRIPTOR_HEAP_DESC rtvHeapDesc{};
 
-
+	ComPtr<ID3D12DescriptorHeap> dsvHeap;
 	DXGI_SWAP_CHAIN_DESC1 swapChainDesc{};
 	
 	D3D12_RESOURCE_BARRIER barrierDesc{};
+	ComPtr<ID3D12Resource> depthBuff;
 };

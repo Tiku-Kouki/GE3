@@ -28,6 +28,8 @@ void DirectXCommon::Initialize(WinApp* winApp)
 
 void DirectXCommon::PreDraw()
 {
+    HRESULT result{};
+
     // バックバッファの番号を取得（2つなので0番か1番）
     UINT bbIndex = swapChain->GetCurrentBackBufferIndex();
 
@@ -76,7 +78,7 @@ void DirectXCommon::PreDraw()
 
 void DirectXCommon::PostDraw()
 {
-    HRESULT result;
+    HRESULT result{};
     // ５．リソースバリアを戻す
     barrierDesc.Transition.StateBefore = D3D12_RESOURCE_STATE_RENDER_TARGET; // 描画状態から
     barrierDesc.Transition.StateAfter = D3D12_RESOURCE_STATE_PRESENT;        // 表示状態へ
@@ -253,7 +255,7 @@ void DirectXCommon::RenderTargetInitialize()
 {
 
     // デスクリプタヒープの設定
-    D3D12_DESCRIPTOR_HEAP_DESC rtvHeapDesc{};
+   
     rtvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV; // レンダーターゲットビュー
     rtvHeapDesc.NumDescriptors = swapChainDesc.BufferCount;    // 裏表の２つ
     // デスクリプタヒープの生成
@@ -302,7 +304,7 @@ void DirectXCommon::DepthBufferTargetInitialize()
     depthClearValue.DepthStencil.Depth = 1.0f; // 深度値1.0f（最大値）でクリア
     depthClearValue.Format = DXGI_FORMAT_D32_FLOAT; // 深度値フォーマット
     // リソース生成
-    ComPtr<ID3D12Resource> depthBuff;
+   
     result = device->CreateCommittedResource(
         &depthHeapProp,
         D3D12_HEAP_FLAG_NONE,
@@ -315,7 +317,7 @@ void DirectXCommon::DepthBufferTargetInitialize()
   
     dsvHeapDesc.NumDescriptors = 1; // 深度ビューは1つ
     dsvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_DSV; // デプスステンシルビュー
-    ComPtr<ID3D12DescriptorHeap> dsvHeap;
+   
     result = device->CreateDescriptorHeap(&dsvHeapDesc, IID_PPV_ARGS(&dsvHeap));
 
     // 深度ビュー作成
