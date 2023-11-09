@@ -8,6 +8,7 @@
 #include <dinput.h>
 #include "WinApp.h"
 #include <vector>
+#include<chrono>
 
 #pragma comment(lib,"d3d12.lib")
 #pragma comment(lib,"dxgi.lib")
@@ -47,7 +48,10 @@ private:
 	//フェンス
 	void FenceTargetInitialize();
 
-
+	void InitializeFixFPS();
+	void UpdateFixFPS();
+	//記録時間(FPS固定用)
+	std::chrono::steady_clock::time_point reference_;
 
 private:
 	//WindowsAPI

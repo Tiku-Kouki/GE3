@@ -1,9 +1,11 @@
 #include "DirectXCommon.h"
 #include <cassert>
-
+#include <thread>
 
 void DirectXCommon::Initialize(WinApp* winApp)
 {
+    InitializeFixFPS();
+
     //NULL検出
     assert(winApp);
 
@@ -103,6 +105,7 @@ void DirectXCommon::PostDraw()
         WaitForSingleObject(event, INFINITE);
         CloseHandle(event);
     }
+    UpdateFixFPS();
 
     // キューをクリア
     result = commandAllocator->Reset();
@@ -342,5 +345,33 @@ void DirectXCommon::FenceTargetInitialize()
     result = device->CreateFence(fenceVal, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&fence));
     assert(SUCCEEDED(result));
 
+}
+
+void DirectXCommon::InitializeFixFPS()
+{
+
+    reference_ = std::chrono::steady_clock::now();
+}
+
+void DirectXCommon::UpdateFixFPS()
+{       //1/60秒ピッタリ
+    const std::chrono::microseconds kMinTime(uint64_t(1000000.0f / 60.0f));
+    //1/60秒よりわずかに短い
+    const std::chrono::microseconds kMinCheckTime(uint64_t(1000000.0f / 65.0f));
+    //現在時間
+    std::chrono::steady_clock::time_point now = std::chrono::steady_clock::now();
+    //前回時間
+    std::chrono::microseconds elapsed =
+        std::chrono::duration_cast<std::chrono::microseconds>(now - reference_);
+
+    if (elapsed < kMinTime) {
+         //1/60秒経過するまで
+        while (std::chrono::steady_clock::now() - reference_ < kMinTime) {
+
+            std::this_thread::sleep_for(std::chrono::microseconds(1));
+        }
+    }
+
+    reference_ = std::chrono::steady_clock::now();
 }
 
