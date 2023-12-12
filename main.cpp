@@ -30,10 +30,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
     //
     SpriteCommon* spriteCommon = new SpriteCommon();
-    spriteCommon->Initialize();
+    spriteCommon->Initialize(dxCommon_);
     //
     Sprite* sprite = new Sprite();
-    sprite->Initialize();
+    sprite->Initialize(dxCommon_, spriteCommon);
 
 
 
@@ -51,7 +51,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
         //描画前処理
         dxCommon_->PreDraw();
 
-       
+        sprite->Draw();
+
+        //描画後処理
         dxCommon_->PostDraw();
        
 
