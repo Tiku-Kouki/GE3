@@ -31,7 +31,7 @@ private:
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView{};
 	
 	//ƒ}ƒeƒŠƒAƒ‹î•ñ
-	ComPtr<ID3D12Resource> materialResource
+	ComPtr<ID3D12Resource> materialResource;
 
 };
 
