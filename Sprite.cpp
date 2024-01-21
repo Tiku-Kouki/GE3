@@ -2,10 +2,10 @@
 #include <DirectXMath.h>
 #include "BufferResource.h"
 
-using namespace DirectX;
+
 
 using namespace Microsoft::WRL;
-
+using namespace DirectX;
 
 
 void Sprite::Initialize(DirectXCommon* dxCommon, SpriteCommon* common)
@@ -16,23 +16,40 @@ void Sprite::Initialize(DirectXCommon* dxCommon, SpriteCommon* common)
 
 	//頂点 情報 
 	CreateVertex();
-
+	//色
 	CreateMaterial();
-
+	//行列
+	CreateWVP();
 }
 
 void Sprite::Draw()
 {
-	
-	
+	//Y軸中心に回転
+	transform.rotate.y += 0.03f;
+
+	//ワールド
+	XMMATRIX scaleMatrix = XMMatrixScalingFromVector(XMLoadFloat3(&transform. scale));
+	XMMATRIX rotateMatrix = XMMatrixScalingFromVector(XMLoadFloat3(&transform.rotate));
+	XMMATRIX translateMatrix = XMMatrixScalingFromVector(XMLoadFloat3(&transform.tlanslate));
+
+	//回転行列とスケール行列の掛け算
+	XMMATRIX rotateAndScaleMatrix = XMMatrixMultiply(rotateMatrix, scaleMatrix);
+	//最終的な行列変換
+	XMMATRIX worldMatrix = XMMatrixMultiply(rotateAndScaleMatrix, translateMatrix);
+
+
 	dxCommon_->GetCommandList()->SetGraphicsRootSignature(common_->GetRootSignature());
 	dxCommon_->GetCommandList()->SetPipelineState(common_->GetPipelineState());
 
+	//頂点情報
 	dxCommon_->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView);
 	dxCommon_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
+	//色情報
 	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource->GetGPUVirtualAddress());
+	//行列
+	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResource->GetGPUVirtualAddress());
 
+	
 	dxCommon_->GetCommandList()->DrawInstanced(3, 1,0, 0);
 
 
@@ -75,7 +92,18 @@ void Sprite::CreateMaterial()
 	 materialResource->Map(0, nullptr, reinterpret_cast<void**>(&materialData));
 
 	
-	*materialData = XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f);
+	 *materialData = color_;
+}
+
+void Sprite::CreateWVP()
+{
+	wvpResource = CreateBufferResource(dxCommon_->GetDevice(), sizeof(XMMATRIX));
+
+	
+
+	wvpResource->Map(0, nullptr, reinterpret_cast<void**>(&wvpData));
+
+	*wvpData = XMMatrixIdentity();
 
 }
 
