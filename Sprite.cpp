@@ -37,6 +37,9 @@ void Sprite::Draw()
 	//ÅI“I‚Ès—ñ•ÏŠ·
 	XMMATRIX worldMatrix = XMMatrixMultiply(rotateAndScaleMatrix, translateMatrix);
 
+	//
+	*wvpData = worldMatrix;
+
 
 	dxCommon_->GetCommandList()->SetGraphicsRootSignature(common_->GetRootSignature());
 	dxCommon_->GetCommandList()->SetPipelineState(common_->GetPipelineState());
