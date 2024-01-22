@@ -29,16 +29,39 @@ void Sprite::Draw()
 
 	//ワールド
 	XMMATRIX scaleMatrix = XMMatrixScalingFromVector(XMLoadFloat3(&transform. scale));
-	XMMATRIX rotateMatrix = XMMatrixScalingFromVector(XMLoadFloat3(&transform.rotate));
-	XMMATRIX translateMatrix = XMMatrixScalingFromVector(XMLoadFloat3(&transform.tlanslate));
+	XMMATRIX rotateMatrix = XMMatrixRotationRollPitchYawFromVector(XMLoadFloat3(&transform.rotate));
+	XMMATRIX translateMatrix = XMMatrixTranslationFromVector(XMLoadFloat3(&transform.tlanslate));
 
 	//回転行列とスケール行列の掛け算
 	XMMATRIX rotateAndScaleMatrix = XMMatrixMultiply(rotateMatrix, scaleMatrix);
 	//最終的な行列変換
 	XMMATRIX worldMatrix = XMMatrixMultiply(rotateAndScaleMatrix, translateMatrix);
 
+	//カメラ
+	XMMATRIX cameraScaleMatrix = XMMatrixScalingFromVector(XMLoadFloat3(&cameraTransform.scale));
+	XMMATRIX cameraRotateMatrix = XMMatrixRotationRollPitchYawFromVector(XMLoadFloat3(&cameraTransform.rotate));
+	XMMATRIX cameraTranslateMatrix = XMMatrixTranslationFromVector(XMLoadFloat3(&cameraTransform.tlanslate));
+
+	//回転行列とスケール行列の掛け算
+	XMMATRIX cameraRotateAndScaleMatrix = XMMatrixMultiply(cameraRotateMatrix, cameraScaleMatrix);
+	//最終的な行列変換
+	XMMATRIX cameraMatrix = XMMatrixMultiply(cameraRotateAndScaleMatrix, cameraTranslateMatrix);
+
+	//View
+	XMMATRIX view = XMMatrixInverse(nullptr, cameraMatrix);
+	XMMATRIX proj = XMMatrixPerspectiveFovLH(
+		XMConvertToRadians(45.f),
+		(float)WinApp::window_width / (float)WinApp::window_height,
+		0.1f,
+		100.f
+
+	);
+	//WVP
+	XMMATRIX worldViewProjectionMatrix = worldMatrix * (view * proj);
+
+
 	//
-	*wvpData = worldMatrix;
+	*wvpData = worldViewProjectionMatrix;
 
 
 	dxCommon_->GetCommandList()->SetGraphicsRootSignature(common_->GetRootSignature());

@@ -54,7 +54,7 @@ private:
 	 //					     scale	 rotate  translate
 	Transform transform = { {1,1,1}, {0,0,0}, {0,0,0} };
 
-	
+	Transform cameraTransform = { {1,1,1}, {0,0,0}, {0,0,-5} };
 
 };
 
