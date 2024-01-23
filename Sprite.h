@@ -26,6 +26,8 @@ public:
 
 	void Initialize(DirectXCommon* dxCommon, SpriteCommon* common);
 
+	void Update();
+
 	void Draw();
 
 private:

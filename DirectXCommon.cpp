@@ -66,11 +66,11 @@ void DirectXCommon::PreDraw()
     commandList->ClearDepthStencilView(dsvHandle, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
 
     //描画用のDescriptorHeapの設定
-    ID3D12DescriptorHeap* descriptorHeaps[] = { srvDescriptorHeap.Get() };
+    ID3D12DescriptorHeap* descriptorHeaps[] = { srvDescriptorHeap.Get()};
     commandList->SetDescriptorHeaps(1, descriptorHeaps);
 
     // ４．描画コマンドここから
-    // ビューポート設定コマンド
+    // ビューポート設定コマンド       
     D3D12_VIEWPORT viewport{};
     viewport.Width = WinApp::window_width;
     viewport.Height = WinApp::window_height;
@@ -366,7 +366,7 @@ ID3D12DescriptorHeap* DirectXCommon::CreateDescripterHeap(D3D12_DESCRIPTOR_HEAP_
     
     D3D12_DESCRIPTOR_HEAP_DESC descriptorHeapDesc{};
     descriptorHeapDesc.Type = heapType;
-    descriptorHeapDesc.NumDescriptors = heapType;
+    descriptorHeapDesc.NumDescriptors = numDescripots;
     descriptorHeapDesc.Flags = shaderVisible ? D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE : D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
 
     HRESULT hrsult = device->CreateDescriptorHeap(&descriptorHeapDesc, IID_PPV_ARGS(&descriptorHeap));

@@ -32,7 +32,8 @@ void WinApp::Initialize()
 {
     //WindowsAPI初期化処理
       
-    
+    //一番最初に呼び出す
+    CoInitializeEx(0,COINIT_MULTITHREADED);
 
     // ウィンドウクラスの設定
    
@@ -86,6 +87,10 @@ bool WinApp::Update()
 
 void WinApp::Finalize()
 {
+    //一番最後
+    CoUninitialize();
+
+
     // ウィンドウクラスを登録解除
     UnregisterClass(w.lpszClassName, w.hInstance);
 }

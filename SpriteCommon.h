@@ -8,6 +8,7 @@
 
 #include "DirectXCommon.h"
 
+#include <DirectXTex.h>
 
 class SpriteCommon
 {
@@ -22,6 +23,12 @@ public:
 	//Getter
 	ID3D12RootSignature* GetRootSignature() { return rootSignature.Get(); }
 	ID3D12PipelineState* GetPipelineState() { return pipelineState.Get(); }
+
+	//画像読み込み
+	DirectX::ScratchImage Loadtexture(const std::wstring& filePath);
+
+	// 読み込んだ画像をGPU(シェーダーに送る)
+	void UploadTextureData(ID3D12Resource* texture, const DirectX::ScratchImage& mipImage);
 
 
 private:

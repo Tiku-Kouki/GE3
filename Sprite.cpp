@@ -1,7 +1,9 @@
 #include "Sprite.h"
 #include <DirectXMath.h>
 #include "BufferResource.h"
+#include "ImGuiManager.h"
 
+#include"externals/imgui/imgui.h"
 
 
 using namespace Microsoft::WRL;
@@ -14,12 +16,26 @@ void Sprite::Initialize(DirectXCommon* dxCommon, SpriteCommon* common)
 
 	common_ = common;
 
+	//‰æ‘œ‚Ì“Ç‚ÝŽæ‚è
+	DirectX::ScratchImage mipImages = common->Loadtexture(L"Resources/mario.jpg");
+
 	//’¸“_ î•ñ 
 	CreateVertex();
 	//F
 	CreateMaterial();
 	//s—ñ
 	CreateWVP();
+}
+
+void Sprite::Update()
+{
+	ImGui::Begin("texture");
+
+	ImGui::DragFloat3("pos", &transform.tlanslate.x, 0.01f);
+
+	ImGui::End();
+
+
 }
 
 void Sprite::Draw()
@@ -111,7 +127,7 @@ void Sprite::CreateVertex()
 
 void Sprite::CreateMaterial()
 {
-	 materialResource= CreateBufferResource(dxCommon_->GetDevice(), sizeof(XMFLOAT4));
+	 materialResource = CreateBufferResource(dxCommon_->GetDevice(), sizeof(XMFLOAT4));
 
 	 XMFLOAT4* materialData = nullptr;
 
