@@ -48,6 +48,13 @@ private:
 	//フェンス
 	void FenceTargetInitialize();
 
+	//	 ディスクリプタヒープ作成
+	ID3D12DescriptorHeap* CreateDescripterHeap(D3D12_DESCRIPTOR_HEAP_TYPE heapType,UINT numDescripots,bool shaderVisible);
+
+
+
+
+
 	void InitializeFixFPS();
 	void UpdateFixFPS();
 	//記録時間(FPS固定用)
@@ -82,4 +89,15 @@ private:
 	
 	D3D12_RESOURCE_BARRIER barrierDesc{};
 	ComPtr<ID3D12Resource> depthBuff;
+
+
+	//ディスクリプタヒープ
+	//RTV(ゲームの画面を保存)
+	ComPtr<ID3D12DescriptorHeap> rtvDescriptorHeap;
+
+	//SRV(画像などを保存しておくもの)
+	ComPtr<ID3D12DescriptorHeap> srvDescriptorHeap;
+
+
+
 };

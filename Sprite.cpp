@@ -25,7 +25,7 @@ void Sprite::Initialize(DirectXCommon* dxCommon, SpriteCommon* common)
 void Sprite::Draw()
 {
 	//Y²’†S‚É‰ñ“]
-	transform.rotate.y += 0.03f;
+	transform.rotate.y += 0.06f;
 
 	//ƒ[ƒ‹ƒh
 	XMMATRIX scaleMatrix = XMMatrixScalingFromVector(XMLoadFloat3(&transform. scale));
