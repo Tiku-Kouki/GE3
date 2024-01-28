@@ -18,6 +18,30 @@ void Sprite::Initialize(DirectXCommon* dxCommon, SpriteCommon* common)
 
 	//画像の読み取り
 	DirectX::ScratchImage mipImages = common->Loadtexture(L"Resources/mario.jpg");
+	const DirectX::TexMetadata& metaData = mipImages.GetMetadata();
+	ID3D12Resource* textureResource = CreateTexureResource(dxCommon_->GetDevice(),metaData);
+	common_->UploadTextureData(textureResource, mipImages);
+	
+	
+	//metaDataを基にSRVの設定
+	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};
+	srvDesc.Format = metaData.format;
+	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;//2Dテクスチャ
+	srvDesc.Texture2D.MipLevels = UINT(metaData.mipLevels);
+
+	D3D12_CPU_DESCRIPTOR_HANDLE textureSrvHandleCPU = dxCommon_->GetSrvDescriptorHeap()->GetCPUDescriptorHandleForHeapStart();
+	D3D12_GPU_DESCRIPTOR_HANDLE textureSrvHandleGPU = dxCommon_->GetSrvDescriptorHeap()->GetGPUDescriptorHandleForHeapStart();
+	//先頭はImGuiが使っているのでその次を使う
+	textureSrvHandleCPU.ptr += dxCommon_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+	textureSrvHandleGPU.ptr += dxCommon_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+
+	////SRVの生成
+	dxCommon_->GetDevice()->CreateShaderResourceView(textureResource, &srvDesc, textureSrvHandleCPU);
+
+	
+
+
 
 	//頂点 情報 
 	CreateVertex();
@@ -99,29 +123,31 @@ void Sprite::Draw()
 
 void Sprite::CreateVertex()
 {
-	vertexResource = CreateBufferResource(dxCommon_->GetDevice(), sizeof(XMFLOAT4) * 3);
+	vertexResource = CreateBufferResource(dxCommon_->GetDevice(), sizeof(VertexData) * 3);
 
 	//頂点バッファビューを作成する
 
 	//リソースの先頭のアドレスから使う
 	vertexBufferView.BufferLocation = vertexResource->GetGPUVirtualAddress();
 	//使用するリソースのサイズは頂点3つ分のサイズ
-	vertexBufferView.SizeInBytes = sizeof(XMFLOAT4) * 3;
+	vertexBufferView.SizeInBytes = sizeof(VertexData) * 3;
 	//1頂点あたりのサイズ
-	vertexBufferView.StrideInBytes = sizeof(XMFLOAT4);
+	vertexBufferView.StrideInBytes = sizeof(VertexData);
 
 	//頂点 情報
-	XMFLOAT4* vertexDate = nullptr;
+	VertexData* vertexDate = nullptr;
 	vertexResource->Map(0, nullptr, reinterpret_cast<void**>(&vertexDate));
 
 	//左下	
-	vertexDate[0] = { -0.5f, -0.5f, 0.0f, 1.0f };
-
+	vertexDate[0].position = { -0.5f, -0.5f, 0.0f, 1.0f };
+	vertexDate[0].texcoord = { 0.0f, 1.0f };
 	//上
-	vertexDate[1] = { +0.0f, +0.5f, 0.0f, 1.0f };
+	vertexDate[1].position = { +0.0f, +0.5f, 0.0f, 1.0f };
+	vertexDate[1].texcoord = { 0.5f, 0.0f };
 
 	//右下
-	vertexDate[2] = { +0.5f, -0.5f, 0.0f, 1.0f };
+	vertexDate[2].position = { +0.5f, -0.5f, 0.0f, 1.0f };
+	vertexDate[2].texcoord = { 1.0f, 1.0f };
 
 }
 

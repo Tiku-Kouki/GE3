@@ -22,6 +22,12 @@ private:
 		DirectX::XMFLOAT3 tlanslate;
 	};
 
+	struct VertexData {
+		DirectX::XMFLOAT4 position;
+		DirectX::XMFLOAT2 texcoord;
+		
+	};
+
 public:
 
 	void Initialize(DirectXCommon* dxCommon, SpriteCommon* common);
