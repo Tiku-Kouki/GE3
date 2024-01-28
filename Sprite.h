@@ -27,6 +27,11 @@ private:
 		DirectX::XMFLOAT2 texcoord;
 		
 	};
+	struct MaterialDate {
+		DirectX::XMFLOAT4 color;
+		DirectX::XMMATRIX uvTransform;
+		
+	};
 
 public:
 
@@ -37,8 +42,12 @@ public:
 	void Draw();
 
 private:
+	//頂点情報作成
 	void CreateVertex();
-	 //マテリアル情報作成
+	//インデックス情報作成
+	void CreateIndex();
+
+	//マテリアル情報作成
 	void CreateMaterial();
 	 //行列情報作成
 	void CreateWVP();
@@ -46,10 +55,15 @@ private:
 private:
 	DirectXCommon* dxCommon_ = nullptr;
 	SpriteCommon* common_ = nullptr;
-	  //頂点情報
+	 //頂点情報
 	ComPtr<ID3D12Resource> vertexResource;
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView{};
 	
+	//インデックス
+	ComPtr<ID3D12Resource> indexResource;
+	D3D12_INDEX_BUFFER_VIEW indexBufferView{};
+
+
 	//マテリアル情報
 	ComPtr<ID3D12Resource> materialResource;
 
@@ -57,12 +71,17 @@ private:
 	ComPtr<ID3D12Resource> wvpResource;
 	DirectX::XMMATRIX* wvpData = nullptr;
 
+	//メンバ変数
+	D3D12_GPU_DESCRIPTOR_HANDLE textureSrvHandleGPU;
+
 	 //パラメータ
-	DirectX::XMFLOAT4 color_ = { 1.0f,0.0f,0.0f,1.0f };
+	DirectX::XMFLOAT4 color_ = { 1.0f,1.0f,1.0f,1.0f };
 	 //					     scale	 rotate  translate
 	Transform transform = { {1,1,1}, {0,0,0}, {0,0,0} };
 
 	Transform cameraTransform = { {1,1,1}, {0,0,0}, {0,0,-5} };
+
+	
 
 };
 

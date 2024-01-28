@@ -31,7 +31,7 @@ void Sprite::Initialize(DirectXCommon* dxCommon, SpriteCommon* common)
 	srvDesc.Texture2D.MipLevels = UINT(metaData.mipLevels);
 
 	D3D12_CPU_DESCRIPTOR_HANDLE textureSrvHandleCPU = dxCommon_->GetSrvDescriptorHeap()->GetCPUDescriptorHandleForHeapStart();
-	D3D12_GPU_DESCRIPTOR_HANDLE textureSrvHandleGPU = dxCommon_->GetSrvDescriptorHeap()->GetGPUDescriptorHandleForHeapStart();
+	textureSrvHandleGPU = dxCommon_->GetSrvDescriptorHeap()->GetGPUDescriptorHandleForHeapStart();
 	//先頭はImGuiが使っているのでその次を使う
 	textureSrvHandleCPU.ptr += dxCommon_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 	textureSrvHandleGPU.ptr += dxCommon_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
@@ -45,6 +45,8 @@ void Sprite::Initialize(DirectXCommon* dxCommon, SpriteCommon* common)
 
 	//頂点 情報 
 	CreateVertex();
+	//インデックス情報作成
+	CreateIndex();
 	//色
 	CreateMaterial();
 	//行列
@@ -65,7 +67,7 @@ void Sprite::Update()
 void Sprite::Draw()
 {
 	//Y軸中心に回転
-	transform.rotate.y += 0.06f;
+	//transform.rotate.y += 0.06f;
 
 	//ワールド
 	XMMATRIX scaleMatrix = XMMatrixScalingFromVector(XMLoadFloat3(&transform. scale));
@@ -106,31 +108,37 @@ void Sprite::Draw()
 
 	dxCommon_->GetCommandList()->SetGraphicsRootSignature(common_->GetRootSignature());
 	dxCommon_->GetCommandList()->SetPipelineState(common_->GetPipelineState());
+	dxCommon_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	//頂点情報
 	dxCommon_->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView);
-	dxCommon_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	//インデックス
+	dxCommon_->GetCommandList()->IASetIndexBuffer(&indexBufferView);
 	//色情報
 	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource->GetGPUVirtualAddress());
 	//行列
 	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResource->GetGPUVirtualAddress());
-
+	//画像
+	dxCommon_->GetCommandList()->SetGraphicsRootDescriptorTable(2, textureSrvHandleGPU); 
 	
-	dxCommon_->GetCommandList()->DrawInstanced(3, 1,0, 0);
-
+	//頂点情報のみ描画
+	//dxCommon_->GetCommandList()->DrawInstanced(6, 1,0, 0);
+	//インデックス情報がある場合の描画
+	dxCommon_->GetCommandList()->DrawIndexedInstanced(6, 1, 0, 0, 0);
 
 }
 
 void Sprite::CreateVertex()
 {
-	vertexResource = CreateBufferResource(dxCommon_->GetDevice(), sizeof(VertexData) * 3);
+	vertexResource = CreateBufferResource(dxCommon_->GetDevice(), sizeof(VertexData) * 4);
 
 	//頂点バッファビューを作成する
 
 	//リソースの先頭のアドレスから使う
 	vertexBufferView.BufferLocation = vertexResource->GetGPUVirtualAddress();
 	//使用するリソースのサイズは頂点3つ分のサイズ
-	vertexBufferView.SizeInBytes = sizeof(VertexData) * 3;
+	vertexBufferView.SizeInBytes = sizeof(VertexData) * 4;
 	//1頂点あたりのサイズ
 	vertexBufferView.StrideInBytes = sizeof(VertexData);
 
@@ -140,27 +148,52 @@ void Sprite::CreateVertex()
 
 	//左下	
 	vertexDate[0].position = { -0.5f, -0.5f, 0.0f, 1.0f };
-	vertexDate[0].texcoord = { 0.0f, 1.0f };
+	vertexDate[0].texcoord = { 0.0f,1.0f };
 	//上
-	vertexDate[1].position = { +0.0f, +0.5f, 0.0f, 1.0f };
-	vertexDate[1].texcoord = { 0.5f, 0.0f };
-
+	vertexDate[1].position = { -0.5f, +0.5f, 0.0f, 1.0f };
+	vertexDate[1].texcoord = { 0.0f,0.0f };
 	//右下
 	vertexDate[2].position = { +0.5f, -0.5f, 0.0f, 1.0f };
-	vertexDate[2].texcoord = { 1.0f, 1.0f };
+	vertexDate[2].texcoord = { 1.0f,1.0f };
+
+	//上
+	vertexDate[3].position = { +0.5f, +0.5f, 0.0f, 1.0f };
+	vertexDate[3].texcoord = { 1.0f, 0.0f };
+	
+}
+
+void Sprite::CreateIndex()
+{
+
+	indexResource = CreateBufferResource(dxCommon_->GetDevice(), sizeof(uint32_t) * 6);
+
+	indexBufferView.BufferLocation = indexResource->GetGPUVirtualAddress();
+	//
+	indexBufferView.SizeInBytes = sizeof(uint32_t) * 6;
+	//
+	indexBufferView.Format = DXGI_FORMAT_R32_UINT;
+
+	//インデックスリソースにデータを書き込む
+	uint32_t* indexData = nullptr;
+	indexResource->Map(0, nullptr, reinterpret_cast<void**>(&indexData));
+
+	indexData[0] = 0; indexData[1] = 1; indexData[2] = 2;
+	indexData[3] = 1; indexData[4] = 3; indexData[5] = 2;
 
 }
 
 void Sprite::CreateMaterial()
 {
-	 materialResource = CreateBufferResource(dxCommon_->GetDevice(), sizeof(XMFLOAT4));
+	 materialResource = CreateBufferResource(dxCommon_->GetDevice(), sizeof(MaterialDate));
 
-	 XMFLOAT4* materialData = nullptr;
+	 MaterialDate* materialData = nullptr;
 
 	 materialResource->Map(0, nullptr, reinterpret_cast<void**>(&materialData));
 
 	
-	 *materialData = color_;
+	 materialData->color = color_;
+	 materialData->uvTransform = XMMatrixIdentity();
+
 }
 
 void Sprite::CreateWVP()
