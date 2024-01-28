@@ -66,6 +66,7 @@ private:
 
 	//マテリアル情報
 	ComPtr<ID3D12Resource> materialResource;
+	MaterialDate* materialData = nullptr;
 
 	//行列情報
 	ComPtr<ID3D12Resource> wvpResource;
@@ -76,6 +77,10 @@ private:
 
 	 //パラメータ
 	DirectX::XMFLOAT4 color_ = { 1.0f,1.0f,1.0f,1.0f };
+	//						   scale   rotate  translate
+	Transform uvTransform = { {1,1,1},{0,0,0},{0,0,0} };
+
+
 	 //					     scale	 rotate  translate
 	Transform transform = { {1,1,1}, {0,0,0}, {0,0,0} };
 

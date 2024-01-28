@@ -59,6 +59,10 @@ void Sprite::Update()
 
 	ImGui::DragFloat3("pos", &transform.tlanslate.x, 0.01f);
 
+	ImGui::DragFloat3("UV-Pos", &uvTransform.tlanslate.x, 0.01f,-10.f,10.f);
+	ImGui::SliderAngle("UV-Rot", &uvTransform.rotate.z);
+	ImGui::DragFloat3("UV-Scale", &uvTransform.scale.x, 0.01f, -10.f, 10.f);
+
 	ImGui::End();
 
 
@@ -104,6 +108,18 @@ void Sprite::Draw()
 
 	//
 	*wvpData = worldViewProjectionMatrix;
+
+
+	//UVワールド
+	XMMATRIX uvScaleMatrix = XMMatrixScalingFromVector(XMLoadFloat3(&uvTransform.scale));
+	XMMATRIX uvRotateMatrix = XMMatrixRotationRollPitchYawFromVector(XMLoadFloat3(&uvTransform.rotate));
+	XMMATRIX uvTranslateMatrix = XMMatrixTranslationFromVector(XMLoadFloat3(&uvTransform.tlanslate));
+
+	//回転行列とスケール行列の掛け算
+	XMMATRIX uvRotateAndScaleMatrix = XMMatrixMultiply(uvRotateMatrix, uvScaleMatrix);
+	//最終的な行列変換
+	XMMATRIX uvWorldMatrix = XMMatrixMultiply(uvRotateAndScaleMatrix, uvTranslateMatrix);
+	materialData->uvTransform = uvWorldMatrix;
 
 
 	dxCommon_->GetCommandList()->SetGraphicsRootSignature(common_->GetRootSignature());
@@ -186,7 +202,7 @@ void Sprite::CreateMaterial()
 {
 	 materialResource = CreateBufferResource(dxCommon_->GetDevice(), sizeof(MaterialDate));
 
-	 MaterialDate* materialData = nullptr;
+	
 
 	 materialResource->Map(0, nullptr, reinterpret_cast<void**>(&materialData));
 
