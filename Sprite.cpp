@@ -66,6 +66,7 @@ void Sprite::Update()
 	ImGui::End();
 
 
+
 }
 
 void Sprite::Draw()

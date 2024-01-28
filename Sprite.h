@@ -68,6 +68,7 @@ private:
 	ComPtr<ID3D12Resource> materialResource;
 	MaterialDate* materialData = nullptr;
 
+
 	//s—ñî•ñ
 	ComPtr<ID3D12Resource> wvpResource;
 	DirectX::XMMATRIX* wvpData = nullptr;
