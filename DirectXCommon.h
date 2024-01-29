@@ -70,6 +70,9 @@ private:
 	void UpdateFixFPS();
 	//‹L˜^ŽžŠÔ(FPSŒÅ’è—p)
 	std::chrono::steady_clock::time_point reference_;
+public:
+	static const uint32_t kMaxSRVCount;
+
 
 private:
 	//WindowsAPI

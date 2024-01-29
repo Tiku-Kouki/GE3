@@ -1,0 +1,49 @@
+#pragma once
+#include "DirectXCommon.h"
+#include <string>
+#include <DirectXTex.h>
+
+class TextureManager
+{
+private:
+	//画像を描画するのに必要
+	struct TextureDate {
+		std::wstring filePath;
+		DirectX::TexMetadata metaData;
+		Microsoft::WRL::ComPtr<ID3D12Resource> resource;
+		D3D12_CPU_DESCRIPTOR_HANDLE	sevHandleCPU;
+		D3D12_GPU_DESCRIPTOR_HANDLE	srvHandleGPU;
+	};
+
+public:
+	// シングルトン
+	static TextureManager* GetInstance();
+	void Finalize();
+
+	void Initialize(DirectXCommon* dxCommon);
+
+	//画像読み込み
+	void Loadtexture(const std::wstring& filePath);
+
+private:
+	// 読み込んだ画像をGPU(シェーダーに送る)
+	void UploadTextureData(ID3D12Resource* texture, const DirectX::ScratchImage& mipImage);
+
+
+private:
+	static TextureManager* instance;
+
+	static uint32_t kSRVIndexTop;
+
+	TextureManager() = default;
+	~TextureManager() = default;
+	TextureManager(TextureManager&) = delete;
+	TextureManager& operator=(TextureManager&) = delete;
+
+private:
+	DirectXCommon* dxCommon_ = nullptr;
+
+	std::vector<TextureDate> textureDatas;
+
+};
+
