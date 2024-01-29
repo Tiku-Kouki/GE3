@@ -55,6 +55,26 @@ void Sprite::Initialize(DirectXCommon* dxCommon, SpriteCommon* common)
 
 void Sprite::Update()
 {
+	//更新
+	transform.tlanslate = { position.x,position.y,0 };
+	transform.rotate = { 0,0,rotation };
+	materialData->color = color_;
+	transform.scale = { size.x,size.y,0 };
+
+	//左下	
+	vertexDate[0].position = { -0.5f, -0.5f, 0.0f, 1.0f };
+	vertexDate[0].texcoord = { 0.0f,1.0f };
+	//上
+	vertexDate[1].position = { -0.5f, +0.5f, 0.0f, 1.0f };
+	vertexDate[1].texcoord = { 0.0f,0.0f };
+	//右下
+	vertexDate[2].position = { +0.5f, -0.5f, 0.0f, 1.0f };
+	vertexDate[2].texcoord = { 1.0f,1.0f };
+
+	//上
+	vertexDate[3].position = { +0.5f, +0.5f, 0.0f, 1.0f };
+	vertexDate[3].texcoord = { 1.0f, 0.0f };
+
 	ImGui::Begin("texture");
 
 	ImGui::DragFloat3("pos", &transform.tlanslate.x, 0.01f);
@@ -160,7 +180,7 @@ void Sprite::CreateVertex()
 	vertexBufferView.StrideInBytes = sizeof(VertexData);
 
 	//頂点 情報
-	VertexData* vertexDate = nullptr;
+	
 	vertexResource->Map(0, nullptr, reinterpret_cast<void**>(&vertexDate));
 
 	//左下	
