@@ -59,7 +59,7 @@ void TextureManager::Loadtexture(const std::wstring& filePath)
 
 	assert(SUCCEEDED(result));
 	//画像データの追加
-	textureDatas.resize(textureDatas.size() * 1);
+	textureDatas.resize(textureDatas.size() + 1);
 	//追加した画像データの編集
 	TextureDate& data = textureDatas.back();
 
