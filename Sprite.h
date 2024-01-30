@@ -46,14 +46,40 @@ public:
 	float GetRotation() { return rotation; }
 	DirectX::XMFLOAT4 GetColor() { return color_; }
 	DirectX::XMFLOAT2 GetSize() { return size; }
+	 //
+	DirectX::XMFLOAT2 GetAnchorPoint() { return anchorPoint; }
+	//左右反転
+	bool GetFlipX() { return isFlipX; }
+	//上下反転
+	bool GetFlipY() { return isFlipY; }
+
+	DirectX::XMFLOAT2 GetTextureLeftTop() { return textureLeftTop; }
+
+	DirectX::XMFLOAT2 GetTextureSize()    {return textureSize;}
+
+
 
 
 	void SetPosition(DirectX::XMFLOAT2 pos) { position = pos; }
 	void SetRotation(float rot) { rotation = rot; }
 	void SetColor(DirectX::XMFLOAT4 color) { color_ = color; }
 	void SetSize(DirectX::XMFLOAT2 size) { this->size = size; }
+	//
+	void  SetAnchorPoint(DirectX::XMFLOAT2 anchor) { anchorPoint = anchor; }
+
+	//左右反転
+	void SetFlipX(bool isFlip) { isFlipX = isFlip; }
+	//上下反転
+	void SetFlipY(bool isFlip) { isFlipY = isFlip; }
+
+	void SetTextureLeftTop(DirectX::XMFLOAT2 leftTop) { textureLeftTop = leftTop; }
+
+	void SetTextureSize(DirectX::XMFLOAT2 size) { textureSize = size; }
+
 
 	void SetTexture(std::wstring textureFilePath);
+
+
 
 private:
 	//頂点情報作成
@@ -65,6 +91,8 @@ private:
 	void CreateMaterial();
 	 //行列情報作成
 	void CreateWVP();
+	//テクスチャサイズをイメージに合わせる
+	void AdjustTextureSize();
 
 private:
 	DirectXCommon* dxCommon_ = nullptr;
@@ -103,6 +131,20 @@ private:
 	float rotation = 0;
 	DirectX::XMFLOAT2 size = { 512,512 };
 
+
+	DirectX::XMFLOAT2 anchorPoint = { 0.5f,0.5f };
+
+	//左右反転
+	bool isFlipX = false;
+	//上下反転
+	bool isFlipY = false;
+
+	//切り抜き
+	//テクスチャ左上座標
+	DirectX::XMFLOAT2 textureLeftTop = { 0.0f,0.0f };
+
+	DirectX::XMFLOAT2 textureSize = { 414.0f,400.0f };
+
 	//テクスチャ番号
 	uint32_t textureIndex_ = 0;
 
@@ -110,6 +152,7 @@ private:
 	Transform cameraTransform = { {1,1,1}, {0,0,0}, {0,0,-5} };
 
 	
+
 
 
 };

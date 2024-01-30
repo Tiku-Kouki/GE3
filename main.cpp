@@ -53,7 +53,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
         if(i%2==0) temp->Initialize(spriteCommon, L"Resources/mario.jpg");
         else if (i % 2 == 1) temp->Initialize(spriteCommon, L"Resources/reimu.png");
         
-        temp->SetPosition({ (float)i * 120 , 0 });
+        temp->SetPosition({ 400,200 });
         
         sprite.push_back(temp);
 

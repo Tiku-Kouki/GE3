@@ -29,29 +29,70 @@ void Sprite::Initialize(SpriteCommon* common, std::wstring textureFilePath)
 	CreateMaterial();
 	//行列
 	CreateWVP();
+
+	AdjustTextureSize();
+
 }
 
 void Sprite::Update()
 {
+	//rotation += 0.01f;
+
 	//更新
 	transform.tlanslate = { position.x,position.y,0 };
 	transform.rotate = { 0,0,rotation };
 	materialData->color = color_;
 	transform.scale = { size.x,size.y,0 };
 
-	//左下	
-	vertexDate[0].position = { 0.0f, 1.0f, 0.0f, 1.0f };
-	vertexDate[0].texcoord = { 0.0f,1.0f };
-	//上
-	vertexDate[1].position = { 0.0f, 0.0f, 0.0f, 1.0f };
-	vertexDate[1].texcoord = { 0.0f,0.0f };
-	//右下
-	vertexDate[2].position = { 1.0f, 1.0f, 0.0f, 1.0f };
-	vertexDate[2].texcoord = { 1.0f,1.0f };
+	//アンカーポイント更新
+	float left    = 0.0f - anchorPoint.x;
+	float right   = 1.0f - anchorPoint.x;
+	float top     = 0.0f - anchorPoint.y;
+	float botom   = 1.0f - anchorPoint.y;
 
+
+	if (isFlipX == true) {
+		//左右反転
+		left = -left;
+		right = -right;
+
+	}
+	if (isFlipY == true) {
+		//上下反転
+		top = -top;
+		botom = -botom;
+
+	}
+
+
+	//左下	
+	vertexDate[0].position = { left, botom, 0.0f, 1.0f };
 	//上
-	vertexDate[3].position = { 1.0f, 0.0f, 0.0f, 1.0f };
-	vertexDate[3].texcoord = { 1.0f, 0.0f };
+	vertexDate[1].position = { left, top, 0.0f, 1.0f };
+	//右下
+	vertexDate[2].position = { right, botom, 0.0f, 1.0f };
+	//上
+	vertexDate[3].position = { right, top, 0.0f, 1.0f };
+	
+
+	const DirectX::TexMetadata& metaData = TextureManager::GetInstance()->GetMetadata(textureIndex_);
+
+	//アンカーポイント更新
+	float tex_left = textureLeftTop.x / metaData.width;
+	float tex_right = (textureLeftTop.x + textureSize.x) / metaData.width;
+	float tex_top = textureLeftTop.y / metaData.height;
+	float tex_botom = (textureLeftTop.y + textureSize.y) / metaData.height;
+
+	//左下	
+	vertexDate[0].texcoord = { tex_left,tex_botom };
+	//上
+	vertexDate[1].texcoord = { tex_left,tex_top };
+	//右下
+	vertexDate[2].texcoord = { tex_right,tex_botom };
+	//上
+	vertexDate[3].texcoord = { tex_right, tex_top };
+
+
 
 	ImGui::Begin("texture");
 
@@ -60,6 +101,8 @@ void Sprite::Update()
 	ImGui::DragFloat3("UV-Pos", &uvTransform.tlanslate.x, 0.01f,-10.f,10.f);
 	ImGui::SliderAngle("UV-Rot", &uvTransform.rotate.z);
 	ImGui::DragFloat3("UV-Scale", &uvTransform.scale.x, 0.01f, -10.f, 10.f);
+
+	ImGui::Checkbox("FlipX",&isFlipX);
 
 	ImGui::End();
 
@@ -218,6 +261,17 @@ void Sprite::CreateWVP()
 	wvpResource->Map(0, nullptr, reinterpret_cast<void**>(&wvpData));
 
 	*wvpData = XMMatrixIdentity();
+
+}
+
+void Sprite::AdjustTextureSize()
+{
+	const DirectX::TexMetadata& metadata = TextureManager::GetInstance()->GetMetadata(textureIndex_);
+
+	textureSize.x = static_cast<float>(metadata.width);
+	textureSize.y = static_cast<float>(metadata.height);
+
+	size = textureSize;
 
 }
 
