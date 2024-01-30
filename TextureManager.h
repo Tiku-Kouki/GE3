@@ -25,6 +25,12 @@ public:
 	//画像読み込み
 	void Loadtexture(const std::wstring& filePath);
 
+	//指定した画像が配列の何番目にあるのか確認
+	uint32_t GetTextureIndexFilePath(const std::wstring& filePath);
+	//指定した要素番号のGPUハンドルを受け取る
+	D3D12_GPU_DESCRIPTOR_HANDLE GetSrvHandleGPU(uint32_t textureIndex);
+
+
 private:
 	// 読み込んだ画像をGPU(シェーダーに送る)
 	void UploadTextureData(ID3D12Resource* texture, const DirectX::ScratchImage& mipImage);

@@ -5,16 +5,21 @@
 
 #include"externals/imgui/imgui.h"
 
+#include "TextureManager.h"
 
 using namespace Microsoft::WRL;
 using namespace DirectX;
 
 
-void Sprite::Initialize(DirectXCommon* dxCommon, SpriteCommon* common)
+void Sprite::Initialize(SpriteCommon* common, std::wstring textureFilePath)
 {
-	dxCommon_ = dxCommon;
+	
 
 	common_ = common;
+
+	dxCommon_ = common_->GetDirectXCommon();
+
+	textureIndex_ = TextureManager::GetInstance()->GetTextureIndexFilePath(textureFilePath);
 
 	//’¸“_ î•ñ 
 	CreateVertex();
@@ -123,7 +128,7 @@ void Sprite::Draw()
 	//s—ñ
 	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResource->GetGPUVirtualAddress());
 	//‰æ‘œ
-	dxCommon_->GetCommandList()->SetGraphicsRootDescriptorTable(2, textureSrvHandleGPU); 
+	dxCommon_->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetSrvHandleGPU(textureIndex_)); 
 	
 	//’¸“_î•ñ‚Ì‚Ý•`‰æ
 	//dxCommon_->GetCommandList()->DrawInstanced(6, 1,0, 0);

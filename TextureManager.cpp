@@ -95,6 +95,34 @@ void TextureManager::Loadtexture(const std::wstring& filePath)
 
 }
 
+uint32_t TextureManager::GetTextureIndexFilePath(const std::wstring& filePath)
+{
+	//読み込み済みか
+	auto it = std::find_if(
+		textureDatas.begin(),
+		textureDatas.end(),
+		[&](TextureDate& textureData) {return textureData.filePath == filePath; }
+	);
+	if (it != textureDatas.end()) {
+		
+		uint32_t textureIndex = static_cast<uint32_t>(std::distance(textureDatas.begin(), it));
+		return textureIndex;
+	}
+	 //対象の画像がなかった場合、停止する
+	assert(0);
+	return 0;
+}
+
+D3D12_GPU_DESCRIPTOR_HANDLE TextureManager::GetSrvHandleGPU(uint32_t textureIndex)
+{
+	//対象の要素数がメモリの範囲外を選択していない確認
+	assert(textureIndex < DirectXCommon::kMaxSRVCount);
+	//要素番号のTexturaDataを受け取る
+	TextureDate& data = textureDatas[textureIndex];
+
+	return data.srvHandleGPU;
+}
+
 void TextureManager::UploadTextureData(ID3D12Resource* texture, const DirectX::ScratchImage& mipImage)
 {
 	

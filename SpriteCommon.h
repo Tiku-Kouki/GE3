@@ -23,7 +23,7 @@ public:
 	//Getter
 	ID3D12RootSignature* GetRootSignature() { return rootSignature.Get(); }
 	ID3D12PipelineState* GetPipelineState() { return pipelineState.Get(); }
-
+	DirectXCommon* GetDirectXCommon() { return dxCommon_; }
 	
 
 	

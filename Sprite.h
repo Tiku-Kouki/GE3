@@ -35,7 +35,7 @@ private:
 
 public:
 
-	void Initialize(DirectXCommon* dxCommon, SpriteCommon* common);
+	void Initialize(SpriteCommon* common,std::wstring textureFilePath);
 
 	void Update();
 
@@ -101,11 +101,14 @@ private:
 	float rotation = 0;
 	DirectX::XMFLOAT2 size = { 512,512 };
 
+	//テクスチャ番号
+	uint32_t textureIndex_ = 0;
 
 	//カメラ
 	Transform cameraTransform = { {1,1,1}, {0,0,0}, {0,0,-5} };
 
 	
+
 
 };
 

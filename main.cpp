@@ -45,16 +45,16 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
     TextureManager::GetInstance()->Loadtexture(L"Resources/mario.jpg");
 
 
-    //
-    /*std::vector<Sprite*> sprite;
+    
+    std::vector<Sprite*> sprite;
     for (int i = 0; i < 5; i++) {
         Sprite* temp = new Sprite();
-        temp->Initialize(dxCommon_, spriteCommon);
+        temp->Initialize(spriteCommon, L"Resources/mario.jpg");
         temp->SetPosition({ (float)i * 120 , 0 });
         
         sprite.push_back(temp);
 
-    }*/
+    }
 
 
 
@@ -93,17 +93,17 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
         //size.y += 0.01f;
         //sprite->SetSize(size);
 
-      /*  for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 5; i++) {
             sprite[i]->Update();
-        }*/
+        }
 
         //描画前処理
         ImGuiManager::CreateCommand();
         dxCommon_->PreDraw();
 
-       /* for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 5; i++) {
             sprite[i]->Draw();
-        }*/
+        }
 
         //描画後処理
         ImGuiManager::CommandExcute(dxCommon_->GetCommandList());
@@ -111,9 +111,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
        
 
     }
-   /* for (int i = 0; i < 5; i++) {
+
+
+
+    for (int i = 0; i < 5; i++) {
         delete sprite[i];
-    }*/
+    }
 
     TextureManager::GetInstance()->Finalize();
 
