@@ -102,7 +102,6 @@ void Sprite::Update()
 	ImGui::SliderAngle("UV-Rot", &uvTransform.rotate.z);
 	ImGui::DragFloat3("UV-Scale", &uvTransform.scale.x, 0.01f, -10.f, 10.f);
 
-	ImGui::Checkbox("FlipX",&isFlipX);
 
 	ImGui::End();
 

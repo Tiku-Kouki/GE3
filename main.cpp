@@ -47,11 +47,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
     
     std::vector<Sprite*> sprite;
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < 2; i++) {
         Sprite* temp = new Sprite();
         
-        if(i%2==0) temp->Initialize(spriteCommon, L"Resources/mario.jpg");
-        else if (i % 2 == 1) temp->Initialize(spriteCommon, L"Resources/reimu.png");
+        if(i%2==1) temp->Initialize(spriteCommon, L"Resources/mario.jpg");
+        else if (i % 2 == 0) temp->Initialize(spriteCommon, L"Resources/reimu.png");
         
         temp->SetPosition({ 400,200 });
         
@@ -75,13 +75,17 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
         
         
         ////移動
-        //DirectX::XMFLOAT2 pos = sprite->GetPosition();
-        //pos.x += 0.01f;
-        //sprite->SetPosition(pos);
-        ////回転
-        //float  rot = sprite->GetRotation();
-        //rot += 0.005f;
-        //sprite->SetRotation(rot);
+        DirectX::XMFLOAT2 pos = sprite[1]->GetPosition();
+        if (input_->PushKey(DIK_UP) || input_->PushKey(DIK_DOWN) || input_->PushKey(DIK_RIGHT) || input_->PushKey(DIK_LEFT))
+        {
+            if (input_->PushKey(DIK_UP)) { pos.y -= 5.0f; }
+            else if (input_->PushKey(DIK_DOWN)) { pos.y += 5.0f; }
+
+            if (input_->PushKey(DIK_RIGHT)) { pos.x += 5.0f; }
+            else if (input_->PushKey(DIK_LEFT)) { pos.x -= 5.0f; }
+
+            sprite[1]->SetPosition(pos);
+        }
 
         ////色
         //DirectX::XMFLOAT4 color = sprite->GetColor();
@@ -96,7 +100,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
         //size.y += 0.01f;
         //sprite->SetSize(size);
 
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 2; i++) {
             sprite[i]->Update();
         }
 
@@ -104,7 +108,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
         ImGuiManager::CreateCommand();
         dxCommon_->PreDraw();
 
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 2; i++) {
             sprite[i]->Draw();
         }
 
@@ -117,7 +121,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 
 
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < 2; i++) {
         delete sprite[i];
     }
 
