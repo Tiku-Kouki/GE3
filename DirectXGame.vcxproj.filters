@@ -16,24 +16,18 @@
     <Filter Include="imgui">
       <UniqueIdentifier>{032dcc02-c092-49fd-9e75-9c3ac5e6b1a1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ENGINEファイル">
+      <UniqueIdentifier>{b1a03efb-7248-4d5b-8ead-043abeb5be43}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ENGINEファイル\Sprite">
+      <UniqueIdentifier>{50621fff-71f0-485e-9395-84c053fd9b0c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ENGINEファイル\Object3d">
+      <UniqueIdentifier>{905f5ac9-347a-48f4-be99-f00740c9b5cf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Input.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="WinApp.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="DirectXCommon.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="SpriteCommon.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Sprite.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="externals\imgui\imgui.cpp">
@@ -57,14 +51,35 @@
     <ClCompile Include="externals\imgui\imgui_widgets.cpp">
       <Filter>imgui</Filter>
     </ClCompile>
+    <ClCompile Include="BufferResource.cpp">
+      <Filter>ENGINEファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectXCommon.cpp">
+      <Filter>ENGINEファイル</Filter>
+    </ClCompile>
     <ClCompile Include="ImGuiManager.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ENGINEファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Input.cpp">
+      <Filter>ENGINEファイル</Filter>
     </ClCompile>
     <ClCompile Include="TextureManager.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ENGINEファイル</Filter>
     </ClCompile>
-    <ClCompile Include="BufferResource.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="WinApp.cpp">
+      <Filter>ENGINEファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Sprite.cpp">
+      <Filter>ENGINEファイル\Sprite</Filter>
+    </ClCompile>
+    <ClCompile Include="SpriteCommon.cpp">
+      <Filter>ENGINEファイル\Sprite</Filter>
+    </ClCompile>
+    <ClCompile Include="Object3d.cpp">
+      <Filter>ENGINEファイル\Object3d</Filter>
+    </ClCompile>
+    <ClCompile Include="Object3dCommon.cpp">
+      <Filter>ENGINEファイル\Object3d</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -90,21 +105,6 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Input.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="WinApp.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="DirectXCommon.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="SpriteCommon.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Sprite.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Vector2.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
@@ -112,9 +112,6 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Vector4.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="BufferResource.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="externals\imgui\imconfig.h">
@@ -141,11 +138,35 @@
     <ClInclude Include="externals\imgui\imstb_truetype.h">
       <Filter>imgui</Filter>
     </ClInclude>
+    <ClInclude Include="BufferResource.h">
+      <Filter>ENGINEファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectXCommon.h">
+      <Filter>ENGINEファイル</Filter>
+    </ClInclude>
     <ClInclude Include="ImGuiManager.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>ENGINEファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Input.h">
+      <Filter>ENGINEファイル</Filter>
     </ClInclude>
     <ClInclude Include="TextureManager.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>ENGINEファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Sprite.h">
+      <Filter>ENGINEファイル\Sprite</Filter>
+    </ClInclude>
+    <ClInclude Include="SpriteCommon.h">
+      <Filter>ENGINEファイル\Sprite</Filter>
+    </ClInclude>
+    <ClInclude Include="WinApp.h">
+      <Filter>ENGINEファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Object3dCommon.h">
+      <Filter>ENGINEファイル\Object3d</Filter>
+    </ClInclude>
+    <ClInclude Include="Object3d.h">
+      <Filter>ENGINEファイル\Object3d</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

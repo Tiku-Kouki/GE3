@@ -8,6 +8,9 @@
 #include<vector>
 
 #include "TextureManager.h"
+#include "Object3d.h"
+#include "Object3dCommon.h"
+
 
 // Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
@@ -26,6 +29,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 #pragma region DirectX初期化処理
     dxCommon_ = new DirectXCommon();
     dxCommon_->Initialize(winApp_);
+
+    Object3dCommon* object3dCommon = nullptr;
+
+    object3dCommon = new Object3dCommon();
+    object3dCommon->Initialize();
+
 
   #pragma endregion
 
@@ -59,7 +68,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
     }
 
+#pragma region 最初のシーンの初期化
+    
+    Object3d* object3d = new Object3d();
+    object3d->Initialize();
 
+
+
+#pragma endregion
 
     // ゲームループ
     while (true) {
