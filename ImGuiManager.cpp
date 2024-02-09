@@ -68,7 +68,8 @@ ImGuiManager::~ImGuiManager()
 
 void ImGuiManager::ShowDemo()
 {
+#ifdef _DEBUG
 	//ImGuiŠm”F—p
 	ImGui::ShowDemoWindow();
-
+#endif // DEBUG
 }

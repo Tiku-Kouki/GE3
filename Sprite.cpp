@@ -93,7 +93,7 @@ void Sprite::Update()
 	vertexDate[3].texcoord = { tex_right, tex_top };
 
 
-
+#ifdef _DEBUG
 	ImGui::Begin("texture");
 
 	ImGui::DragFloat3("pos", &transform.tlanslate.x, 0.01f);
@@ -104,7 +104,7 @@ void Sprite::Update()
 
 
 	ImGui::End();
-
+#endif // DEBUG
 
 
 }
